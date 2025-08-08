@@ -1,3 +1,27 @@
+@use '../abstracts/variables' as *;
+
 .main-navigation {
-    display: flex;
+
+    ul {
+       display: flex;
+
+       li {
+        padding: 0 1em;
+
+            &:first-child {
+                padding-left: 0;
+            }
+
+            &:last-child {
+                padding-right: 0;
+            }
+
+            a {
+                color: $black;
+                font-family: $montserrat;
+                font-size: 16px;
+                text-decoration: none;
+            }
+        }    
+    }
 }

@@ -5,13 +5,11 @@ const cleanCSS = require('gulp-clean-css');
 const sourcemaps = require('gulp-sourcemaps');
 const rename = require('gulp-rename');
 
-// Paths
 const paths = {
-    scss: './assets/scss/**/*.scss',
+    scss: './assets/scss/main.scss',
     cssDest: './assets/css'
 };
 
-// Compile SCSS
 gulp.task('styles', function () {
     return gulp.src(paths.scss)
         .pipe(sourcemaps.init())
@@ -22,10 +20,8 @@ gulp.task('styles', function () {
         .pipe(gulp.dest(paths.cssDest));
 });
 
-// Watch
 gulp.task('watch', function () {
-    gulp.watch(paths.scss, gulp.series('styles'));
+    gulp.watch('./assets/scss/**/*.scss', gulp.series('styles'));
 });
 
-// Default
 gulp.task('default', gulp.series('styles', 'watch'));

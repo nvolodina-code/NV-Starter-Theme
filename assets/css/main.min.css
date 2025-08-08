@@ -1,2 +1,2 @@
-.wrapper{max-width:1280px;width:90%;margin:0 auto}
+.main-navigation ul{display:flex}.main-navigation ul li{padding:0 1em}.main-navigation ul li:first-child{padding-left:0}.main-navigation ul li:last-child{padding-right:0}.main-navigation ul li a{color:#545454;font-family:Montserrat,sans-serif;font-size:16px;text-decoration:none}.wrapper{margin:0 auto;max-width:1280px;width:90%}
 /*# sourceMappingURL=main.min.css.map */
