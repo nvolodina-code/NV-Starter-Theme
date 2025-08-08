@@ -1,0 +1,59 @@
+{
+  "key": "group_8f84ef4c35ab",
+  "title": "Portfolio Project Fields",
+  "fields": [
+    {
+      "key": "field_b4b0daaaeddc",
+      "label": "Project Role",
+      "name": "project_role",
+      "type": "text"
+    },
+    {
+      "key": "field_40dc1889aca5",
+      "label": "Technologies Used",
+      "name": "technologies_used",
+      "type": "repeater",
+      "sub_fields": [
+        {
+          "key": "field_591f8f3cf648",
+          "label": "Technology",
+          "name": "technology",
+          "type": "text"
+        }
+      ],
+      "min": 1,
+      "layout": "table",
+      "button_label": "Add Technology"
+    },
+    {
+      "key": "field_c7aab4553b4e",
+      "label": "Project URL",
+      "name": "project_url",
+      "type": "url"
+    },
+    {
+      "key": "field_7b9c6f0ff1ac",
+      "label": "Project Thumbnail",
+      "name": "project_thumbnail",
+      "type": "image",
+      "return_format": "array",
+      "preview_size": "medium",
+      "library": "all"
+    }
+  ],
+  "location": [
+    [
+      {
+        "param": "post_type",
+        "operator": "==",
+        "value": "portfolio"
+      }
+    ]
+  ],
+  "position": "normal",
+  "style": "default",
+  "label_placement": "top",
+  "instruction_placement": "label",
+  "active": true,
+  "description": ""
+}
