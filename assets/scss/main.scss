@@ -1,1 +1,12 @@
-<?php // main.scss ?>
+@use 'abstracts/variables';
+@use 'abstracts/mixins';
+@use 'abstracts/functions';
+@use 'base/typography';
+@use 'base/base';
+@use 'layout/header';
+@use 'layout/footer';
+@use 'layout/layout';
+@use 'components/buttons';
+@use 'components/forms';
+@use 'sections/hero';
+@use 'sections/about';

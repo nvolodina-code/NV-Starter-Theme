@@ -90,6 +90,7 @@ function nonna_register_hero_settings() {
     register_setting('nonna_hero_group', 'nonna_hero_layout');
     register_setting('nonna_hero_group', 'nonna_hero_bg_color');
     register_setting('nonna_hero_group', 'nonna_hero_bg_image');
+    register_setting('nonna_hero_group', 'nonna_hero_image');
     register_setting('nonna_hero_group', 'nonna_hero_heading');
     register_setting('nonna_hero_group', 'nonna_hero_subheading');
     register_setting('nonna_hero_group', 'nonna_hero_text');
@@ -126,9 +127,19 @@ function nonna_register_hero_settings() {
         echo '<input type="color" name="nonna_hero_bg_color" value="' . esc_attr($value) . '">';
     }, 'nonna_theme_hero', 'nonna_hero_section');
 
-    add_settings_field('nonna_hero_bg_image', 'Background Image URL', function () {
+    add_settings_field('nonna_hero_bg_image', 'Background Image', function () {
         $value = get_option('nonna_hero_bg_image', '');
-        echo '<input type="url" name="nonna_hero_bg_image" value="' . esc_attr($value) . '" size="60">';
+        $input_id = 'nonna_hero_bg_image';
+        echo '<input type="text" id="' . esc_attr($input_id) . '" name="nonna_hero_bg_image" value="' . esc_attr($value) . '" size="60" />';
+        echo ' <button type="button" class="button nonna-upload-btn" data-target="' . esc_attr($input_id) . '">Choose Image</button>';
+    }, 'nonna_theme_hero', 'nonna_hero_section');
+
+
+    add_settings_field('nonna_hero_image', 'Hero Image', function () {
+        $value = get_option('nonna_hero_image', '');
+        $input_id = 'nonna_hero_image';
+        echo '<input type="text" id="' . esc_attr($input_id) . '" name="nonna_hero_image" value="' . esc_attr($value) . '" size="60" />';
+        echo ' <button type="button" class="button nonna-upload-btn" data-target="' . esc_attr($input_id) . '">Choose Image</button>';
     }, 'nonna_theme_hero', 'nonna_hero_section');
 
     add_settings_field('nonna_hero_heading', 'Heading', function () {

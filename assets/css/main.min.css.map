@@ -1,0 +1,1 @@
+{"version":3,"sources":["layout/_layout.scss"],"names":[],"mappings":"AAAA,SACI,UAAA,OACA,MAAA,IACA,OAAA,EAAA","file":"main.min.css","sourcesContent":[".wrapper {\n    max-width: 1280px;\n    width: 90%;\n    margin: 0 auto;\n}"]}
