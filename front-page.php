@@ -19,7 +19,7 @@ if ($bg_image) {
 }
 ?>
 
-<section class="hero-section" style="<?php echo esc_attr($hero_style); ?>">
+<section class="hero" style="<?php echo esc_attr($hero_style); ?>">
     <div class="container wrapper" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 40px;">
         <?php
         $image_html = $image ? '<div class="hero-image" style="flex:1 1 300px;"><img src="' . esc_url($image) . '" alt="" style="width:100%; height:auto; border-radius: 10px;"></div>' : '';

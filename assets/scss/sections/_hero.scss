@@ -1,0 +1,11 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+.hero {
+
+    h1 {
+        color: $orange;
+        font-family: $brittany;
+        font-size: 62px;
+    }
+}
