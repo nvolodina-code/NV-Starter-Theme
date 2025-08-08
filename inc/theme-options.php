@@ -87,6 +87,7 @@ function nonna_theme_hero_section() {
 }
 
 function nonna_register_hero_settings() {
+    register_setting('nonna_hero_group', 'nonna_hero_layout');
     register_setting('nonna_hero_group', 'nonna_hero_bg_color');
     register_setting('nonna_hero_group', 'nonna_hero_bg_image');
     register_setting('nonna_hero_group', 'nonna_hero_heading');
@@ -101,6 +102,24 @@ function nonna_register_hero_settings() {
         null,
         'nonna_theme_hero'
     );
+
+    add_settings_field('nonna_hero_layout', 'Hero Layout', function () {
+    $value = get_option('nonna_hero_layout', 'image-left');
+
+    $options = [
+        'image-left'   => 'Image Left / Content Right',
+        'content-left' => 'Content Left / Image Right',
+        'image-top'    => 'Image Top / Content Bottom',
+        'content-top'  => 'Content Top / Image Bottom',
+    ];
+
+    foreach ($options as $key => $label) {
+        echo '<label style="display:block; margin-bottom:4px;">';
+        echo '<input type="radio" name="nonna_hero_layout" value="' . esc_attr($key) . '" ' . checked($value, $key, false) . '> ';
+        echo esc_html($label);
+        echo '</label>';
+    }
+}, 'nonna_theme_hero', 'nonna_hero_section');
 
     add_settings_field('nonna_hero_bg_color', 'Background Colour', function () {
         $value = get_option('nonna_hero_bg_color', '#ffffff');
