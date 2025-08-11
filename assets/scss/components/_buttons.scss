@@ -1,0 +1,17 @@
+@use '../abstracts/variables' as *;
+
+.cta {
+    background: $yellow;
+    border: 1px solid $yellow;
+    border-radius: 25px;
+    color: $black;
+    font-family: $montserrat;
+    padding: 1em;
+    text-decoration: none;
+
+    &:hover {
+        color: $yellow;
+        background: $black;
+        border: 1px solid $black;
+    }
+}

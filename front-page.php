@@ -24,10 +24,10 @@ if ($bg_image) {
         <?php
         $image_html = $image ? '<div class="hero-image" style="flex:1 1 300px;"><img src="' . esc_url($image) . '" alt="" style="width:100%; height:auto; border-radius: 10px;"></div>' : '';
         $content_html = '<div class="hero-content" style="flex:1 1 300px;">'
-            . ($heading ? '<h1 style="margin-bottom: 10px;">' . esc_html($heading) . '</h1>' : '')
-            . ($subheading ? '<h3 style="margin-bottom: 20px;">' . esc_html($subheading) . '</h3>' : '')
-            . ($text ? '<p style="margin-bottom: 20px;">' . esc_html($text) . '</p>' : '')
-            . ($cta_text && $cta_url ? '<a href="' . esc_url($cta_url) . '" class="hero-cta" style="display: inline-block; padding: 10px 20px; background: #333; color: #fff; border-radius: 4px;">' . esc_html($cta_text) . '</a>' : '')
+            . ($heading ? '<h1>' . esc_html($heading) . '</h1>' : '')
+            . ($subheading ? '<h2>' . esc_html($subheading) . '</h2>' : '')
+            . ($text ? '<p>' . esc_html($text) . '</p>' : '')
+            . ($cta_text && $cta_url ? '<a href="' . esc_url($cta_url) . '" class="cta">' . esc_html($cta_text) . '</a>' : '')
             . '</div>';
 
         switch ($layout) {
