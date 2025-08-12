@@ -243,6 +243,7 @@ function nonna_register_about_settings() {
         )
     );
 
+    register_setting('nonna_about_group', 'nonna_about_bg_color');
     // Resume CTA
     register_setting('nonna_about_group', 'nonna_about_resume_label');
     register_setting('nonna_about_group', 'nonna_about_resume_file');
@@ -523,6 +524,11 @@ function nonna_register_about_settings() {
         'nonna_theme_about',
         'nonna_about_section'
     );
+
+    add_settings_field('nonna_about_bg_color', 'Background Colour', function () {
+        $value = get_option('nonna_about_bg_color', '#ffffff');
+        echo '<input type="color" name="nonna_about_bg_color" value="' . esc_attr($value) . '">';
+    }, 'nonna_theme_about', 'nonna_about_section');
 
     // Resume CTA
     add_settings_field('nonna_about_resume_label', 'Resume Button Label', function () {
