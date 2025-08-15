@@ -22,57 +22,61 @@ if ($hero_bg_image) {
 ?>
 
 <section class="hero" style="<?php echo esc_attr($hero_style); ?>">
-    <div class="container wrapper" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 40px;">
-        <?php
-        $hero_image_html = $hero_image ? '<div class="hero__image" style="flex:1 1 300px;"><img src="' . esc_url($hero_image) . '" alt="" style="width:100%; height:auto; border-radius: 10px;"></div>' : '';
-        $content_html = '<div class="hero__content" style="flex:1 1 300px;">'
-            . ($heading ? '<h1>' . esc_html($heading) . '</h1>' : '')
-            . ($subheading ? '<h2>' . esc_html($subheading) . '</h2>' : '')
-            . ($text ? '<p>' . esc_html($text) . '</p>' : '')
-            . ($cta_text && $cta_url ? '<a href="' . esc_url($cta_url) . '" class="cta cta__yellow">' . esc_html($cta_text) . '</a>' : '')
-            . '</div>';
+    <div class="wrapper">
+        <div class="container">
+            <?php
+            $hero_image_html = $hero_image ? '<figure class="container__image hero__image"><img src="' . esc_url($hero_image) . '" alt=""></figure>' : '';
+            $content_html = '<div class="container__content hero__content">'
+                . ($heading ? '<h1>' . esc_html($heading) . '</h1>' : '')
+                . ($subheading ? '<h2>' . esc_html($subheading) . '</h2>' : '')
+                . ($text ? '<p>' . esc_html($text) . '</p>' : '')
+                . ($cta_text && $cta_url ? '<a href="' . esc_url($cta_url) . '" class="cta cta__yellow">' . esc_html($cta_text) . '</a>' : '')
+                . '</div>';
 
-        switch ($layout) {
-            case 'image-left':
-                echo $hero_image_html . $content_html;
-                break;
-            case 'content-left':
-                echo $content_html . $hero_image_html;
-                break;
-            case 'image-top':
-                echo '<div style="flex-basis: 100%; text-align: center;">' . $hero_image_html . '</div>';
-                echo '<div style="flex-basis: 100%; text-align: center;">' . $content_html . '</div>';
-                break;
-            case 'content-top':
-                echo '<div style="flex-basis: 100%; text-align: center;">' . $content_html . '</div>';
-                echo '<div style="flex-basis: 100%; text-align: center;">' . $hero_image_html . '</div>';
-                break;
-        }
-        ?>
+            switch ($layout) {
+                case 'image-left':
+                    echo $hero_image_html . $content_html;
+                    break;
+                case 'content-left':
+                    echo $content_html . $hero_image_html;
+                    break;
+                case 'image-top':
+                    echo '<div style="flex-basis: 100%; text-align: center;">' . $hero_image_html . '</div>';
+                    echo '<div style="flex-basis: 100%; text-align: center;">' . $content_html . '</div>';
+                    break;
+                case 'content-top':
+                    echo '<div style="flex-basis: 100%; text-align: center;">' . $content_html . '</div>';
+                    echo '<div style="flex-basis: 100%; text-align: center;">' . $hero_image_html . '</div>';
+                    break;
+            }
+            ?>
+        </div>
     </div>
 </section>
 <section class="about" style="background-color: <?php echo $about_bg_color ?>">
-    <div class="container wrapper" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 40px;">
-        <div class="about__content">
-            <?php $sections = get_option('nonna_about_sections', array());
-            if (!empty($sections) && is_array($sections)) {
-                foreach ($sections as $row) {
-                    $heading = isset($row['heading']) ? $row['heading'] : '';
-                    $text    = isset($row['text']) ? $row['text'] : '';
-                    if ($heading || $text) {
-                        echo '<div class="about-me">';
-                        if ($heading) echo '<h3>'.esc_html($heading).'</h3>';
-                        if ($text)    echo wpautop(wp_kses_post($text));
-                        echo '</div>';
+    <div class="wrapper">
+        <div class="container">
+            <div class="about__content container__content">
+                <?php $sections = get_option('nonna_about_sections', array());
+                if (!empty($sections) && is_array($sections)) {
+                    foreach ($sections as $row) {
+                        $heading = isset($row['heading']) ? $row['heading'] : '';
+                        $text    = isset($row['text']) ? $row['text'] : '';
+                        if ($heading || $text) {
+                            echo '<div class="about-me">';
+                                if ($heading) echo '<h3>'.esc_html($heading).'</h3>';
+                                if ($text)    echo wpautop(wp_kses_post($text));
+                            echo '</div>';
+                        }
                     }
-                }
-            } ?>
-        </div>
-        <?php if ( ! empty( $about_image ) ) : ?>
-            <figure class="about__image" style="flex:1 1 300px;">
-                <img src="<?php echo esc_url( $about_image ); ?>" alt="" style="width:100%; height:auto; border-radius:10px;">
-            </figure>
+                } ?>
+            </div>
+            <?php if ( ! empty( $about_image ) ) : ?>
+                <figure class="about__image container__image">
+                    <img src="<?php echo esc_url( $about_image ); ?>" alt="">
+                </figure>
             <?php endif; ?>
+        </div>
     </div>
 </section>
 
