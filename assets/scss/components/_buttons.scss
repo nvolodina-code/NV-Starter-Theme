@@ -17,4 +17,15 @@
             border: 1px solid $black;
         }
     }
+
+    &__pink {
+        background: $pink;
+        border: 1px solid $pink;
+        color: $white;
+
+        &:hover {
+            color: $pink;
+            background: $white;
+        }
+    }
 }

@@ -2,18 +2,24 @@
 
 <?php
 // Hero Options
-$hero_bg_color   = get_option('nonna_hero_bg_color', '#ffffff');
-$hero_bg_image   = get_option('nonna_hero_bg_image', '');
-$hero_image      = get_option('nonna_hero_image', '');
-$heading    = get_option('nonna_hero_heading', '');
-$subheading = get_option('nonna_hero_subheading', '');
-$text       = get_option('nonna_hero_text', '');
-$cta_text   = get_option('nonna_hero_cta_text', '');
-$cta_url    = get_option('nonna_hero_cta_url', '');
-$layout     = get_option('nonna_hero_layout', 'image-left');
+$hero_bg_color      = get_option('nonna_hero_bg_color', '#ffffff');
+$hero_bg_image      = get_option('nonna_hero_bg_image', '');
+$hero_image         = get_option('nonna_hero_image', '');
+$heading            = get_option('nonna_hero_heading', '');
+$subheading         = get_option('nonna_hero_subheading', '');
+$text               = get_option('nonna_hero_text', '');
+$cta_text           = get_option('nonna_hero_cta_text', '');
+$cta_url            = get_option('nonna_hero_cta_url', '');
+$layout             = get_option('nonna_hero_layout', 'image-left');
 // About Options
-$about_bg_color = get_option('nonna_about_bg_color', '#ffffff');
-$about_image    = get_option('nonna_about_image', '');
+$about_bg_color     = get_option('nonna_about_bg_color', '#ffffff');
+$about_image        = get_option('nonna_about_image', '');
+$badge_enabled      = (int) get_option('nonna_about_badge_enabled', 0);
+$badge_img        = trim( get_option('nonna_about_badge_image', '') );
+$badge_pos          = get_option('nonna_about_badge_position', 'top-right');
+
+$about_cta_text = get_option('nonna_about_resume_label', '');
+$about_cta_url  = get_option('nonna_about_resume_file', '');
 
 $hero_style = "background-color: {$hero_bg_color};";
 if ($hero_bg_image) {
@@ -70,10 +76,16 @@ if ($hero_bg_image) {
                         }
                     }
                 } ?>
+                <a class="about-cta cta cta__pink" href="<?php echo $about_cta_url ?>"><?php echo $about_cta_text ?></a> 
             </div>
             <?php if ( ! empty( $about_image ) ) : ?>
-                <figure class="about__image container__image">
-                    <img src="<?php echo esc_url( $about_image ); ?>" alt="">
+                <figure class="about__image-container container__image">
+                    <?php if ( $badge_enabled && $badge_img !== '' ) : ?>
+                        <span class="about-badge badge--<?php echo esc_attr( $badge_pos ); ?>">
+                            <img class="about-badge__img" src="<?php echo esc_url( $badge_img ); ?>" alt="" />
+                        </span>
+                    <?php endif; ?>
+                    <img class="about-image" src="<?php echo esc_url( $about_image ); ?>" alt="">
                 </figure>
             <?php endif; ?>
         </div>

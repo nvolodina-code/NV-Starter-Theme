@@ -220,29 +220,6 @@ function nonna_register_about_settings() {
         )
     );
 
-    // Repeater: Education (degree, school, years)
-    register_setting(
-        'nonna_about_group',
-        'nonna_about_education',
-        array(
-            'type'              => 'array',
-            'sanitize_callback' => function($input){
-                $out = array();
-                if (is_array($input)) {
-                    foreach ($input as $row) {
-                        $degree = isset($row['degree']) ? sanitize_text_field($row['degree']) : '';
-                        $school = isset($row['school']) ? sanitize_text_field($row['school']) : '';
-                        $years  = isset($row['years'])  ? sanitize_text_field($row['years'])  : '';
-                        if ($degree !== '' || $school !== '' || $years !== '') {
-                            $out[] = compact('degree','school','years');
-                        }
-                    }
-                }
-                return $out;
-            }
-        )
-    );
-
     register_setting('nonna_about_group', 'nonna_about_bg_color');
     // Resume CTA
     register_setting('nonna_about_group', 'nonna_about_resume_label');
@@ -265,10 +242,10 @@ function nonna_register_about_settings() {
         },
         'default'           => 'top-right',
     ));
-    register_setting('nonna_about_group', 'nonna_about_badge_text', array(
-        'type'              => 'string',
-        'sanitize_callback' => 'sanitize_text_field',
-        'default'           => '',
+    register_setting('nonna_about_group', 'nonna_about_badge_image', array(
+        'type' => 'string',
+        'sanitize_callback' => 'esc_url_raw',
+        'default' => '',
     ));
 
     /**
@@ -402,129 +379,6 @@ function nonna_register_about_settings() {
         'nonna_about_section'
     );
 
-    // Repeater: Education
-    add_settings_field(
-        'nonna_about_education',
-        'Education',
-        function () {
-            $rows = get_option('nonna_about_education', array());
-            if (!is_array($rows)) $rows = array();
-            $field_name = 'nonna_about_education';
-
-            echo '<div id="nonna-education-repeater">';
-
-            if (!empty($rows)) {
-                foreach ($rows as $i => $row) {
-                    $degree = isset($row['degree']) ? $row['degree'] : '';
-                    $school = isset($row['school']) ? $row['school'] : '';
-                    $years  = isset($row['years'])  ? $row['years']  : '';
-                    ?>
-                    <div class="nonna-repeater-row" style="margin:0 0 16px; padding:12px; border:1px solid #ddd; background:#fff;">
-                        <p style="margin-bottom:8px;">
-                            <label><strong>Degree</strong></label><br>
-                            <input type="text" name="<?php echo esc_attr($field_name); ?>[<?php echo (int)$i; ?>][degree]" value="<?php echo esc_attr($degree); ?>" size="40" placeholder="e.g., MLIS">
-                        </p>
-                        <p style="margin-bottom:8px;">
-                            <label><strong>School</strong></label><br>
-                            <input type="text" name="<?php echo esc_attr($field_name); ?>[<?php echo (int)$i; ?>][school]" value="<?php echo esc_attr($school); ?>" size="40" placeholder="e.g., University of Toronto">
-                        </p>
-                        <p style="margin-bottom:8px;">
-                            <label><strong>Years</strong></label><br>
-                            <input type="text" name="<?php echo esc_attr($field_name); ?>[<?php echo (int)$i; ?>][years]" value="<?php echo esc_attr($years); ?>" size="20" placeholder="e.g., 2012–2016">
-                        </p>
-                        <button type="button" class="button link-delete-row">Remove</button>
-                    </div>
-                    <?php
-                }
-            } else {
-                ?>
-                <div class="nonna-repeater-row" style="margin:0 0 16px; padding:12px; border:1px solid #ddd; background:#fff;">
-                    <p style="margin-bottom:8px;">
-                        <label><strong>Degree</strong></label><br>
-                        <input type="text" name="<?php echo esc_attr($field_name); ?>[0][degree]" value="" size="40" placeholder="e.g., MLIS">
-                    </p>
-                    <p style="margin-bottom:8px;">
-                        <label><strong>School</strong></label><br>
-                        <input type="text" name="<?php echo esc_attr($field_name); ?>[0][school]" value="" size="40" placeholder="e.g., University of Toronto">
-                    </p>
-                    <p style="margin-bottom:8px;">
-                        <label><strong>Years</strong></label><br>
-                        <input type="text" name="<?php echo esc_attr($field_name); ?>[0][years]" value="" size="20" placeholder="e.g., 2012–2016">
-                    </p>
-                    <button type="button" class="button link-delete-row">Remove</button>
-                </div>
-                <?php
-            }
-
-            echo '</div>';
-            echo '<p><button type="button" class="button button-secondary" id="nonna-education-add">Add Education</button></p>';
-            ?>
-            <script type="text/html" id="tmpl-nonna-education-row">
-                <div class="nonna-repeater-row" style="margin:0 0 16px; padding:12px; border:1px solid #ddd; background:#fff;">
-                    <p style="margin-bottom:8px;">
-                        <label><strong>Degree</strong></label><br>
-                        <input type="text" name="<?php echo esc_attr($field_name); ?>[{{INDEX}}][degree]" value="" size="40" placeholder="e.g., MLIS">
-                    </p>
-                    <p style="margin-bottom:8px;">
-                        <label><strong>School</strong></label><br>
-                        <input type="text" name="<?php echo esc_attr($field_name); ?>[{{INDEX}}][school]" value="" size="40" placeholder="e.g., University of Toronto">
-                    </p>
-                    <p style="margin-bottom:8px;">
-                        <label><strong>Years</strong></label><br>
-                        <input type="text" name="<?php echo esc_attr($field_name); ?>[{{INDEX}}][years]" value="" size="20" placeholder="e.g., 2012–2016">
-                    </p>
-                    <button type="button" class="button link-delete-row">Remove</button>
-                </div>
-            </script>
-            <script>
-            (function(){
-                const wrap  = document.getElementById('nonna-education-repeater');
-                const add   = document.getElementById('nonna-education-add');
-                const tmpl  = document.getElementById('tmpl-nonna-education-row').textContent;
-
-                function getNextIndex(){
-                    const rows = wrap.querySelectorAll('.nonna-repeater-row');
-                    let max = -1;
-                    rows.forEach(function(row){
-                        const inp = row.querySelector('input[name^="nonna_about_education["]');
-                        if (!inp) return;
-                        const m = inp.name.match(/nonna_about_education\[(\d+)\]\[degree\]/);
-                        if (m) { const idx = parseInt(m[1], 10); if (idx > max) max = idx; }
-                    });
-                    return max + 1;
-                }
-
-                function bindRemove(scope){
-                    (scope || document).querySelectorAll('.link-delete-row').forEach(function(btn){
-                        btn.addEventListener('click', function(){
-                            const row = this.closest('.nonna-repeater-row');
-                            if (row && wrap.children.length > 1) row.remove();
-                            else if (row) {
-                                row.querySelectorAll('input').forEach(i => i.value = '');
-                            }
-                        });
-                    });
-                }
-
-                add.addEventListener('click', function(){
-                    const idx = getNextIndex();
-                    const html = tmpl.replace(/{{INDEX}}/g, String(idx));
-                    const temp = document.createElement('div');
-                    temp.innerHTML = html.trim();
-                    const node = temp.firstElementChild;
-                    wrap.appendChild(node);
-                    bindRemove(node);
-                });
-
-                bindRemove();
-            })();
-            </script>
-            <?php
-        },
-        'nonna_theme_about',
-        'nonna_about_section'
-    );
-
     add_settings_field('nonna_about_bg_color', 'Background Colour', function () {
         $value = get_option('nonna_about_bg_color', '#ffffff');
         echo '<input type="color" name="nonna_about_bg_color" value="' . esc_attr($value) . '">';
@@ -572,9 +426,15 @@ function nonna_register_about_settings() {
         echo '</select>';
     }, 'nonna_theme_about', 'nonna_about_section');
 
-    add_settings_field('nonna_about_badge_text', 'Badge Text', function () {
-        $value = get_option('nonna_about_badge_text', '');
-        echo '<input type="text" id="nonna_about_badge_text" name="nonna_about_badge_text" value="' . esc_attr($value) . '" size="60" placeholder="e.g., Available for hire">';
+    add_settings_field('nonna_about_badge_image', 'Badge Image', function () {
+        $value = get_option('nonna_about_badge_image', '');
+        $input_id = 'nonna_about_badge_image';
+        echo '<input type="text" id="' . esc_attr($input_id) . '" name="nonna_about_badge_image" value="' . esc_attr($value) . '" size="60" />';
+        echo ' <button type="button" class="button nonna-upload-btn" data-target="' . esc_attr($input_id) . '" data-type="image">Choose Image</button>';
+        // Optional tiny preview
+        echo '<div style="margin-top:8px">';
+        echo $value ? '<img src="'.esc_url($value).'" alt="" style="max-width:120px;height:auto;border:1px solid #ddd;border-radius:6px;">' : '<em>No image selected</em>';
+        echo '</div>';
     }, 'nonna_theme_about', 'nonna_about_section');
 }
 

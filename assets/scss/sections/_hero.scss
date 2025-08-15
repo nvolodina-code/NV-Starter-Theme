@@ -19,13 +19,9 @@
             font-weight: bold;
             padding: 1.7em 0 1.3em 0;
         }
-    
+
         p {
-            color: $black;
-            font-family: $montserrat;
-            font-size: 16px;
-            line-height: 1.5em;
-            margin: 0 0 2.5em 0;
+            @include paragraph-style;
         }
     }
 

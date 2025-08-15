@@ -1,0 +1,28 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+.about {
+    padding: 6em 0;
+
+    h3 {
+        color: $pink;
+        font-size: 32px;
+        font-family: $gilda;
+        margin: 0 0 1em 0;
+    }
+
+    p {
+        @include paragraph-style;
+    }
+
+    &__image-container {
+        position: relative;
+    }
+}
+
+.about-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+}
