@@ -1,0 +1,13 @@
+@use '../abstracts/variables' as *;
+@use '../abstracts/mixins' as *;
+
+h3 {
+    color: $pink;
+    font-size: 32px;
+    font-family: $gilda;
+    margin: 0 0 1em 0;
+}
+
+p {
+    @include paragraph-style;
+}

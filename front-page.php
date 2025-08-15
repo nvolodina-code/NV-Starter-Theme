@@ -2,7 +2,7 @@
 
 <?php
 // Hero Options
-$hero_bg_color      = get_option('nonna_hero_bg_color', '#ffffff');
+$hero_bg_color      = get_option('nonna_hero_bg_color', '#fff');
 $hero_bg_image      = get_option('nonna_hero_bg_image', '');
 $hero_image         = get_option('nonna_hero_image', '');
 $heading            = get_option('nonna_hero_heading', '');
@@ -12,14 +12,18 @@ $cta_text           = get_option('nonna_hero_cta_text', '');
 $cta_url            = get_option('nonna_hero_cta_url', '');
 $layout             = get_option('nonna_hero_layout', 'image-left');
 // About Options
-$about_bg_color     = get_option('nonna_about_bg_color', '#ffffff');
+$about_bg_color     = get_option('nonna_about_bg_color', '#ffff');
 $about_image        = get_option('nonna_about_image', '');
 $badge_enabled      = (int) get_option('nonna_about_badge_enabled', 0);
-$badge_img        = trim( get_option('nonna_about_badge_image', '') );
+$badge_img          = trim( get_option('nonna_about_badge_image', '') );
 $badge_pos          = get_option('nonna_about_badge_position', 'top-right');
+$about_cta_text     = get_option('nonna_about_resume_label', '');
+$about_cta_url      = get_option('nonna_about_resume_file', '');
+// Skills Options
+$skills_bg_color    = get_option('nonna_skills_bg', '#fff');
+$skills_heading     = get_option('nonna_skills_heading', '');
+$skills_rows = get_option('nonna_skills_items', []);
 
-$about_cta_text = get_option('nonna_about_resume_label', '');
-$about_cta_url  = get_option('nonna_about_resume_file', '');
 
 $hero_style = "background-color: {$hero_bg_color};";
 if ($hero_bg_image) {
@@ -59,7 +63,7 @@ if ($hero_bg_image) {
         </div>
     </div>
 </section>
-<section class="about" style="background-color: <?php echo $about_bg_color ?>">
+<section class="about section-padding" style="background-color: <?php echo $about_bg_color ?>">
     <div class="wrapper">
         <div class="container">
             <div class="about__content container__content">
@@ -89,6 +93,27 @@ if ($hero_bg_image) {
                 </figure>
             <?php endif; ?>
         </div>
+    </div>
+</section>
+<section class="skills section-padding" style="background-color: <?php echo $skills_bg_color ?>;">
+    <div class="wrapper">
+        <h3><?php echo $skills_heading ?></h3>
+        <ul class="skills__list">
+            <?php foreach ($skills_rows as $row) :
+                $icon = trim($row['icon_class'] ?? '');
+                $desc = trim($row['description'] ?? '');
+                if ($icon === '' && $desc === '') continue;
+                ?>
+                <li class="skills__item">
+                    <?php if ($icon) : ?>
+                        <i class="<?php echo $icon ?>" aria-hidden="true"></i>
+                    <?php endif; ?>
+                    <?php if ($desc) : ?>
+                        <span class="skills__label"><?php echo esc_html($desc); ?></span>
+                    <?php endif; ?>
+                </li>
+            <?php endforeach; ?>
+        </ul>
     </div>
 </section>
 

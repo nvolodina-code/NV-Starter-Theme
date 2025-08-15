@@ -30,6 +30,15 @@ function nonna_register_theme_options() {
         'nonna_theme_about',
         'nonna_theme_about_section'
     );
+
+    add_submenu_page(
+        'nonna_theme_options',
+        'Skills',
+        'Skills',
+        'manage_options',
+        'nonna_theme_skills',
+        'nonna_theme_skills_section'
+    );
 }
 add_action('admin_menu', 'nonna_register_theme_options');
 
@@ -438,6 +447,170 @@ function nonna_register_about_settings() {
     }, 'nonna_theme_about', 'nonna_about_section');
 }
 
+function nonna_theme_skills_section() { ?>
+  <div class="wrap">
+    <h1>Skills Section</h1>
+    <form method="post" action="options.php">
+      <?php
+      settings_fields('nonna_skills_group');
+      do_settings_sections('nonna_theme_skills');
+      submit_button();
+      ?>
+    </form>
+  </div>
+<?php }
+
+function nonna_register_skills_settings() {
+    // SETTINGS
+    register_setting('nonna_skills_group', 'nonna_skills_bg', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_hex_color',
+        'default' => '#ffffff',
+    ]);
+
+    register_setting('nonna_skills_group', 'nonna_skills_heading', [
+        'type' => 'string',
+        'sanitize_callback' => 'sanitize_text_field',
+        'default' => 'Skills',
+    ]);
+
+    // Repeater: [{ icon_class, description }]
+    register_setting('nonna_skills_group', 'nonna_skills_items', [
+        'type' => 'array',
+        'sanitize_callback' => function($input){
+            $out = [];
+            if (is_array($input)) {
+                foreach ($input as $row) {
+                    $icon = isset($row['icon_class']) ? sanitize_text_field($row['icon_class']) : '';
+                    $desc = isset($row['description'])  ? sanitize_text_field($row['description'])  : '';
+                    if ($icon !== '' || $desc !== '') {
+                        $out[] = ['icon_class' => $icon, 'description' => $desc];
+                    }
+                }
+            }
+            return $out;
+        }
+    ]);
+
+    // SECTION
+    add_settings_section(
+        'nonna_skills_section',
+        'Skills Settings',
+        null,
+        'nonna_theme_skills'
+    );
+
+    // FIELDS
+    add_settings_field('nonna_skills_bg', 'Background Colour', function () {
+        $v = get_option('nonna_skills_bg', '#ffffff');
+        echo '<input type="color" name="nonna_skills_bg" value="'.esc_attr($v).'">';
+    }, 'nonna_theme_skills', 'nonna_skills_section');
+
+    add_settings_field('nonna_skills_heading', 'Heading', function () {
+        $v = get_option('nonna_skills_heading', 'Skills');
+        echo '<input type="text" name="nonna_skills_heading" value="'.esc_attr($v).'" size="60">';
+    }, 'nonna_theme_skills', 'nonna_skills_section');
+
+    add_settings_field('nonna_skills_items', 'Skill Items', function () {
+        $rows = get_option('nonna_skills_items', []);
+        if (!is_array($rows)) $rows = [];
+        $name = 'nonna_skills_items';
+
+        echo '<div id="skills-repeater">';
+        if ($rows) {
+            foreach ($rows as $i => $row) {
+                $icon = $row['icon_class'] ?? '';
+                $desc = $row['description'] ?? '';
+                ?>
+                <div class="skill-row" style="margin:0 0 12px; padding:12px; border:1px solid #ddd; background:#fff;">
+                  <p style="margin:.25rem 0;">
+                    <label><strong>Font Awesome Class</strong></label><br>
+                    <input type="text" name="<?php echo esc_attr($name); ?>[<?php echo (int)$i; ?>][icon_class]" value="<?php echo esc_attr($icon); ?>" size="12" placeholder="fa-heart">
+                  </p>
+                  <p style="margin:.25rem 0;">
+                    <label><strong>Description</strong></label><br>
+                    <input type="text" name="<?php echo esc_attr($name); ?>[<?php echo (int)$i; ?>][description]" value="<?php echo esc_attr($desc); ?>" size="60" placeholder="Sass, Gulp, Accessibility…">
+                  </p>
+                  <button type="button" class="button link-delete-row">Remove</button>
+                </div>
+                <?php
+            }
+        } else { ?>
+            <div class="skill-row" style="margin:0 0 12px; padding:12px; border:1px solid #ddd; background:#fff;">
+              <p style="margin:.25rem 0;">
+                <label><strong>Font Awesome Class</strong></label><br>
+                <input type="text" name="<?php echo esc_attr($name); ?>[0][icon_class]" value="" size="12" placeholder="fa-heart">
+              </p>
+              <p style="margin:.25rem 0;">
+                <label><strong>Description</strong></label><br>
+                <input type="text" name="<?php echo esc_attr($name); ?>[0][description]" value="" size="60" placeholder="Sass, Gulp, Accessibility…">
+              </p>
+              <button type="button" class="button link-delete-row">Remove</button>
+            </div>
+        <?php }
+        echo '</div>';
+
+        echo '<p><button type="button" class="button button-secondary" id="skills-add">Add Skill</button></p>';
+        ?>
+
+        <script type="text/html" id="tmpl-skill-row">
+          <div class="skill-row" style="margin:0 0 12px; padding:12px; border:1px solid #ddd; background:#fff;">
+            <p style="margin:.25rem 0;">
+              <label><strong>Font Awesome Class</strong></label><br>
+              <input type="text" name="<?php echo esc_attr($name); ?>[{{INDEX}}][icon_class]" value="" size="12" placeholder="fa-heart">
+            </p>
+            <p style="margin:.25rem 0;">
+              <label><strong>Description</strong></label><br>
+              <input type="text" name="<?php echo esc_attr($name); ?>[{{INDEX}}][description]" value="" size="60" placeholder="Sass, Gulp, Accessibility…">
+            </p>
+            <button type="button" class="button link-delete-row">Remove</button>
+          </div>
+        </script>
+
+        <script>
+        (function(){
+          const wrap  = document.getElementById('skills-repeater');
+          const add   = document.getElementById('skills-add');
+          const tmpl  = document.getElementById('tmpl-skill-row').textContent;
+
+          function nextIndex(){
+            const rows = wrap.querySelectorAll('.skill-row input[name^="nonna_skills_items["][name$="[icon_class]"]');
+            let max = -1;
+            rows.forEach(function(inp){
+              const m = inp.name.match(/nonna_skills_items\[(\d+)\]\[icon_class\]/);
+              if (m){ const n = parseInt(m[1],10); if (n > max) max = n; }
+            });
+            return max + 1;
+          }
+
+          function bindRemove(scope){
+            (scope||document).querySelectorAll('.link-delete-row').forEach(function(btn){
+              btn.addEventListener('click', function(){
+                const row = this.closest('.skill-row');
+                if (row && wrap.children.length > 1) row.remove();
+                else if (row) row.querySelectorAll('input').forEach(i => i.value = '');
+              });
+            });
+          }
+
+          add.addEventListener('click', function(){
+            const idx = nextIndex();
+            const html = tmpl.replace(/{{INDEX}}/g, String(idx));
+            const temp = document.createElement('div');
+            temp.innerHTML = html.trim();
+            const node = temp.firstElementChild;
+            wrap.appendChild(node);
+            bindRemove(node);
+          });
+
+          bindRemove();
+        })();
+        </script>
+        <?php
+    }, 'nonna_theme_skills', 'nonna_skills_section');
+}
+
+
 
 /**
  * Hook settings registrations
@@ -445,4 +618,5 @@ function nonna_register_about_settings() {
 add_action('admin_init', function () {
     nonna_register_hero_settings();
     nonna_register_about_settings();
+    nonna_register_skills_settings();
 });
