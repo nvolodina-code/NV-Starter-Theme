@@ -23,7 +23,7 @@
         <?php endif; ?>
       </div>
 
-      <nav class="main-navigation" role="navigation">
+      <!-- <nav class="main-navigation" role="navigation">
         <?php
           wp_nav_menu([
             'theme_location' => 'primary',
@@ -31,6 +31,6 @@
             'container'      => false
           ]);
         ?>
-      </nav>
+      </nav> -->
     </div>
   </header>
